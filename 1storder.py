@@ -5,7 +5,7 @@ def deriv(x,y):
     #return y' from x,y
     return 10*y*(1-y)
 
-def eulersmeth-od(xlength, deltax = 1, initx = 0, inity = 0):
+def eulersmethod(xlength, deltax = 1, initx = 0, inity = 0):
     xvals = [initx]
     yvals = [inity]
     for _ in range(int(xlength/deltax)):
@@ -45,20 +45,22 @@ def make_graph(xvals,yvals):
     plt.show()
 
 
-def tests():
-    em = eulersmethod(10,0.1,0,0.5)
+def tests(xlength = 10, deltax = 0.1, initx = 0 , inity = 0.5):
+    em = eulersmethod(xlength, deltax, initx, inity)
     make_graph(em[0],em[1])
-
-    rk = runge_kutta(10,0.1,0,0.5)
+    rk = runge_kutta(xlength, deltax, initx, inity)
     make_graph(rk[0],rk[1])
 
+def compute_all_txt(xlength, deltax, initx, inity):
+    em = eulersmethod(xlength, deltax, initx, inity)
+    rk = runge_kutta(xlength, deltax, initx, inity)
+    eulername = "eapx:" + str(deltax) + "(" + str(initx) + ", "+ str(inity) + ")"
+    rkname = "rkapx:" + str(deltax) + "(" + str(initx) + ", "+ str(inity) + ")"
+    print_txt(eulername, em[0], em[1])
+    print_txt(rkname, rk[0], rk[1])
+
 def outmain():
-    em = eulersmethod(10,0.1,0,0.5)
-    rk = runge_kutta(10,0.1,0,0.5)
-    print_txt("eulerapx.txt", em[0], em[1])
-    print_txt("rlapx.txt", rk[0], rk[1])
+    compute_all_txt()
 
 
-#
-tests()
 outmain()
