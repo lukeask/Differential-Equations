@@ -42,11 +42,13 @@ def print_txt(name, xvals, yvals):
     outfile.write(";")
     for y in yvals:
         outputformatted = str(y) + ","
+        outfile.write(outputformatted)
     outfile.close()
 
 # displays a graph given x and y coordinate lists
-def make_graph(xvals,yvals):
+def make_graph(xvals,yvals, name = 'Figure'):
     plt.plot(xvals,yvals)
+    plt.title(name)
     plt.show()
 
 # displays graphs for numerical methods
@@ -65,6 +67,14 @@ def compute_all_txt(xlength, deltax, initx, inity):
     print_txt(eulername, em[0], em[1])
     print_txt(rkname, rk[0], rk[1])
 
+def generate_all_plots(xlength, deltax, initx, inity):
+    em = eulersmethod(xlength, deltax, initx, inity)
+    rk = runge_kutta(xlength, deltax, initx, inity)
+    ename = "Euler's Method with Step Size " + str(deltax)
+    rkname = "Runge Kutta Method with Step Size" + str(deltax)
+    make_graph(em[0], em[1], ename)
+    make_graph(rk[0], rk[1], rkname)
+
 # computes outputs for lab requirements
 def outmain():
     compute_all_txt(50, 0.1, 0, 0.1)
@@ -72,4 +82,15 @@ def outmain():
     compute_all_txt(50, 0.23, 0, 0.1)
     compute_all_txt(50, 0.25, 0, 0.1)
     compute_all_txt(50, 0.3, 0, 0.1)
-outmain()
+
+# generates plots for lab requirements
+def plotmain():
+    generate_all_plots(50, 0.1, 0, 0.1)
+    generate_all_plots(50, 0.18, 0, 0.1)
+    generate_all_plots(50, 0.23, 0, 0.1)
+    generate_all_plots(50, 0.25, 0, 0.1)
+    generate_all_plots(50, 0.3, 0, 0.1)
+
+#outmain()
+#plotmain()
+generate_all_plots(50, 0.01, 0, 0.1)
