@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 #optional exact equation
 def exacteq(x):
-    return 2.71828182845**x
+    return 1/(1-(math.sin(x)*math.cos(x)))
 
 def exactmethod(xlength, deltax, initx, inity):
     xvals = [initx]
@@ -19,7 +20,7 @@ def exactmethod(xlength, deltax, initx, inity):
 # input differential equation in the form of y' = f(x,y)
 def deriv(x,y):
     #return y' from x,y
-    return y
+    return y*y*math.cos(2*x)
 
 
 #implimentation of euler's method
@@ -116,22 +117,22 @@ def plotmain():
     generate_all_plots(50, 0.3, 0, 0.1)
 
 
-def plotvsexact(h = 0.1):
-    em = runge_kutta(1, h, 0, 1)
+def plotvsexact(h = 0.4):
+    em = eulersmethod(6, h, 0, 1)
     xvals = em[0]
     yvals = em[1]
     max_error = 0
     #import pdb; pdb.set_trace()
     for i in enumerate(xvals):
-        temp = ((exacteq(xvals[i[0]])-yvals[i[0]])**2)**(0.5)
+        temp = ((xvals[i[0]]-yvals[i[0]])**2)**(0.5)
         if temp >= max_error:
             max_error = temp
-    exm = exactmethod(1, h, 0, 1)
+    exm = exactmethod(6, h, 0, 1)
     #import pdb; pdb.set_trace()
     xvals = xvals + exm[0]
     yvals = yvals + exm[1]
     print(max_error)
-    make_graph(xvals, yvals, "y' = y Euler's Method h = " + str(h))
+    make_graph(xvals, yvals, "y' = y^2cos(2x) Euler h = " + str(h))
 
 for i in range(8):
-    plotvsexact(0.1/(2**i))
+    plotvsexact(0.5/(2**i))
