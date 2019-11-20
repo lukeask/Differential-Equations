@@ -1,13 +1,14 @@
 import cmath
 import math
 
+#tracks useful equation information
 class Equation:
     def __init__(self, function, derivative):
         self.eq = function
         self.deriv = derivative
 
-    #compute a complex zero from initial value
-    def newtonsmethod(self, xinit, maxiters = 1000, yerror = 0.00000001):
+    #compute a complex zero from initial value, returns 0 location and error
+    def newtonsmethod(self, xinit, maxiters = 1000, yerror = 0):
         xnew = xinit
         for i in range(maxiters):
             xnew = xnew - (self.eq(x = xnew)/self.deriv(xnew))
@@ -19,13 +20,15 @@ class Equation:
 
         return xnew, error_modulus
 
+# added functionality for polynomial equations
 class PolynomialEquation(Equation):
     def __init__(self, function, derivative, degree, largest_coeff = 100000):
         super().__init__(function, derivative)
         self.degree = degree
         self.largest_coeff = largest_coeff
 
-    def findallzeros(self, angles = 50, pts_per_dir = 20, same_value_cutoff = 0.001, output_cutoff = 0.001):
+    #returns all zeros
+    def findallzeros(self, angles = 50, pts_per_dir = 20, same_value_cutoff = 0.1, output_cutoff = 0.001):
         search_radius = self.largest_coeff + 1
         allzeros = []
 
@@ -41,18 +44,18 @@ class PolynomialEquation(Equation):
                     allzeros.append(self.newtonsmethod(c_point)[0])
 
         #sorts for duplicates
+        #TODO: Bugfix
         i = 0
         while len(allzeros) > self.degree:
             i += 1
             for zero2 in range(len(allzeros)):
                 for zero3 in range(len(allzeros)):
                     try:
-                        if pow((allzeros[zero2]-allzeros[zero3]).real,2) + pow((allzeros[zero2]-allzeros[zero3]).real,2) < same_value_cutoff:
+                        if pow((allzeros[zero2]-allzeros[zero3]).real,2) + pow((allzeros[zero2]-allzeros[zero3]).real,2) < same_value_cutoff and zero2 != zero3:
                             allzeros.pop(zero2)
                     except:
                         pass
-            same_value_cutoff = same_value_cutoff * 1.1
-            output_cutoff = output_cutoff * 0.9
+            same_value_cutoff = same_value_cutoff * 0.9
             if len(allzeros) >= self.degree or i > 1000000:
                 import pdb; pdb.set_trace()
                 return allzeros
@@ -61,7 +64,7 @@ class PolynomialEquation(Equation):
 
 
 
-
+#creates a PolynomialEquation object with user input
 def polypacker(equationname = "Polynomial Equation", var = "setvar"):
     if var == "setvar":
         var = input("{} Variable}: ".format(equationname))
@@ -95,6 +98,4 @@ def polypacker(equationname = "Polynomial Equation", var = "setvar"):
 
 if __name__ == "__main__":
     indicialeq = polypacker("Indicial Equation", "r")
-    x = indicialeq.findallzeros()
-    print(len(x))
-    print(x)
+    print(indicialeq.findallzeros())
