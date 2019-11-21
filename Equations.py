@@ -113,4 +113,6 @@ def polypacker(equationname = "Polynomial Equation", var = "setvar"):
 
 if __name__ == "__main__":
     indicialeq = polypacker("Indicial Equation", "r")
-    print(indicialeq.get_zeros())
+    solutions = indicialeq.get_zeros()
+    for solution in solutions:
+        print("ce^({})t)\n".format(solution))
